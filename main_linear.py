@@ -12,6 +12,8 @@ from main_ce import set_loader
 from util import AverageMeter
 from util import adjust_learning_rate, warmup_learning_rate, accuracy
 from util import set_optimizer
+from util import set_seed, dict2tsv
+
 from networks.resnet_big import SupConResNet, LinearClassifier
 
 try:
@@ -24,6 +26,7 @@ except ImportError:
 def parse_option():
     parser = argparse.ArgumentParser('argument for training')
 
+    parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--print_freq', type=int, default=10,
                         help='print frequency')
     parser.add_argument('--save_freq', type=int, default=50,
@@ -228,6 +231,7 @@ def main():
     best_acc = 0
     opt = parse_option()
 
+    set_seed(opt.seed)
     # build data loader
     train_loader, val_loader = set_loader(opt)
 

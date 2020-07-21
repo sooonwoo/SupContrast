@@ -14,6 +14,8 @@ from torchvision import transforms, datasets
 from util import TwoCropTransform, AverageMeter
 from util import adjust_learning_rate, warmup_learning_rate
 from util import set_optimizer, save_model
+from util import set_seed, dict2tsv
+
 from networks.resnet_big import SupConResNet
 from losses import SupConLoss
 
@@ -27,6 +29,7 @@ except ImportError:
 def parse_option():
     parser = argparse.ArgumentParser('argument for training')
 
+    parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--print_freq', type=int, default=10,
                         help='print frequency')
     parser.add_argument('--save_freq', type=int, default=50,
@@ -237,6 +240,7 @@ def train(train_loader, model, criterion, optimizer, epoch, opt):
 def main():
     opt = parse_option()
 
+    set_seed(opt.seed)
     # build data loader
     train_loader = set_loader(opt)
 
